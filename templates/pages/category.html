@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    {% if category_products %}
+    <h1>{{category.name}}</h1>
+    <div class="row">
+        {% for product in category_products %}
+        <div class="col-md-4">
+            <h2>{{ product.name }}</h2>
+            <a href="{{ product.get_absolute_url }}"><img src="{{ product.image.url }}" width="180"></a>
+            <form action="{% url 'cart_page' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row" style="margin: 30px auto;">
+        <div class="col-md-12">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if category_products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ category_products.previous_page_number }}" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link" >{{ category_products.number }}</a></li>
+                    {% if category_products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ category_products.next_page_number }}" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-dark" role="alert">Тут пока ничего нет!</div>
+    {% endif %}
+</div>
+{% endblock %}

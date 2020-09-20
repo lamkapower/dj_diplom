@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="col-md-12">
+        <h2>{{product.name}}</h2>
+        <img src="{{product.image.url}}" width="120">
+        <p>{{product.text}}</p>
+        <form action="{% url 'cart_page' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{product.id}}">
+          <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
+        </form>
+      </div>
+    </div>
+    <hr>
+    {% for review in product_reviews %}
+    {{review.stars}} <span>{{review.user.username|capfirst}}</span>
+    <p>{{review.text}}</p>
+    {% endfor %}
+    <hr>
+    {% if request.user.is_authenticated and can_write %}
+    <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-12">
+        <h4>Оставте отзыв:</h4>
+        <form action="{{request.path}}feedback/" method="post">
+          {% csrf_token %}
+          <!-- <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Представтесь" name="name" data-cip-id="name">
+          </div> -->
+          <div class="form-group">
+            <label for="content">Содержание</label>
+            <textarea class="form-control" id="content" placeholder="Содержание" name="description"></textarea>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mark" id="mark1" value="1">
+            <label class="form-check-label" for="mark1">1</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mark" id="mark2" value="2">
+            <label class="form-check-label" for="mark2">2</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mark" id="mark3" value="3">
+            <label class="form-check-label" for="mark3">3</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mark" id="mark4" value="4">
+            <label class="form-check-label" for="mark4">4</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mark" id="mark5" value="5">
+            <label class="form-check-label" for="mark5">5</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Оставить</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+  </div> <!-- /container -->
+{% endblock %}

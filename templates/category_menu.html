@@ -1,0 +1,17 @@
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item{% if request.path == '/'%} active{% endif %}"><a class="nav-link" href="{% url 'main' %}">Главная</a></li>
+  {% for category in categories %}
+    {% if category.child %}
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{category.name}}</a>
+      <div class="dropdown-menu" aria-labelledby="dropdown01">
+        {% for ch in category.children %}
+        <a class="dropdown-item" href="{{ch.url}}">{{ch.name}}</a>
+        {% endfor %}
+      </div>
+    </li>
+    {% elif not category.parent %}
+    <li class="nav-item{% if request.path == category.url %} active{% endif %}"><a class="nav-link" href="{{category.url}}">{{category.name}}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
